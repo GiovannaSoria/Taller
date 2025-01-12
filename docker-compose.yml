@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Base de datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: sisdb2025
+    ports:
+      - "3306:3306"
+    networks:
+      - micro_network
+
+  # Microservicio micro_asignatura
+  micro_asignatura:
+    build:
+      context: ./micro_asignatura
+    container_name: micro_asignatura
+    depends_on:
+      - db
+    environment:
+      # Variables que Spring Boot usará si no encuentra en application.properties
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/sisdb2025?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123
+      # El microservicio escucha en 8001 (según tu application.properties)
+      # Puedes forzar aquí: SERVER_PORT=8001
+    ports:
+      - "8001:8001"
+    networks:
+      - micro_network
+
+  # Microservicio micro_cursos
+  micro_cursos:
+    build:
+      context: ./micro_cursos
+    container_name: micro_cursos
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/sisdb2025?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123
+      # Este microservicio escucha en 8002
+    ports:
+      - "8002:8002"
+    networks:
+      - micro_network
+
+networks:
+  micro_network:
+    driver: bridge
