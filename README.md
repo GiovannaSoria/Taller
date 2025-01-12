@@ -1,6 +1,6 @@
 # Taller
-```markdown
-# Proyecto Distribuido: micro_asignatura y micro_cursos
+
+#  Proyecto Distribuido: micro_asignatura y micro_cursos
 
 Este proyecto contiene **dos microservicios** (micro_asignatura y micro_cursos) que se conectan a una **base de datos MySQL** en contenedores Docker. La base de datos utilizada se llama `sisdb2025`.
 
